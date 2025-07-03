@@ -136,3 +136,84 @@ runProcessingFlow("https://example.com");
 ```
 
 4. Level 3-4 : 
+* github : https://github.com/Richnuts/archipelago-international-chat
+* website : https://richnuts.github.io/archipelago-international-chat/
+
+# Vue.js
+1. Explain Vue.js reactivity and common issues when tracking changes.
+2. Describe data flow between components in a Vue.js app
+3. List the most common cause of memory leaks in Vue.js apps and how they can be solved.
+4. What have you used for state management
+5. What’s the difference between pre-rendering and server side rendering?
+Answer : 
+* Pre-rendering : HTML is generated at build time
+* SSR : HTML is generated on each request.
+# Website Security Best Practises
+* Tell me all the security best practices you can think of - start with the most important ones first.
+Answer : 
+1. Always validate & sanitize user input.
+2. Don’t expose sensitive data to FE.
+3. Use proper authentication & authorization.
+4. Always use HTTPS.
+5. Rate limiting & CAPTCHA to prevent brute force.
+
+
+
+# Website Performance Best Practises
+* Tell me all the performance best practices you can think of - start with the most important ones first.
+Answers : 
+1. Caching.
+2. Optimize image size.
+3. Lazy load.
+4. Use efficient queries & indexing on backend.
+
+# Golang (if interviewing for a Golang job) / .NET Candidate 
+Answer : 
+```
+// You can edit this code!
+// Click here and start typing.
+package main
+
+import (
+	"fmt"
+	"regexp"
+	"strings"
+)
+
+func main() {
+	text := "Four, One two two three Three three four  four   four"
+
+	// replace all non-word & non-space characters with space
+	re := regexp.MustCompile(`[^\w\s]`)
+	text = re.ReplaceAllString(text, " ")
+
+	// lower & split
+	words := strings.Fields(strings.ToLower(text))
+
+	wordFreq := map[string]int{}
+	for _, w := range words {
+		wordFreq[w]++
+	}
+
+	for w, c := range wordFreq {
+		fmt.Printf("%s => %d\n", w, c)
+	}
+}
+
+```
+
+
+# Tools (Rate yourself 1 to 5)
+Git - 5
+Redis - 4
+VSCode / JetBrains? - 5
+Linux? - 4
+AWS - 4
+EC2 - 4
+Lambda - 3
+RDS - 3 
+Cloudwatch - 3
+S3 - 4
+Unit testing - 5 (Golang)
+Kanban boards - 4
+
