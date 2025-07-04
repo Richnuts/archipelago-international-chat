@@ -1,24 +1,42 @@
 # Basic Question
-1. Imagine you're building a website that allows users to submit photos. One of the requirements is that each photo must be reviewed by a moderator before it can be published. How would you design the logic for this process? What technologies would you use? Do you have any data structure in mind to support this based on your technology of choice to handle those data?
+#### Imagine you're building a website that allows users to submit photos. One of the requirements is that each photo must be reviewed by a moderator before it can be published. How would you design the logic for this process? What technologies would you use? Do you have any data structure in mind to support this based on your technology of choice to handle those data?
 
-**Logic Flow:**
-1.  **User Uploads Photo:** A user submits a photo from the website.
-2.  **Store & Tag:** The photo is saved, and its status is marked as "pending review" in the database.
-3.  **Moderator Dashboard:** Moderators log into a special dashboard to see all "pending review" photos.
-4.  **Review & Decide:** A moderator checks the photo and either "approves" it or "rejects" it.
-5.  **Publish/Hide:** If approved, the photo becomes visible to everyone. If rejected, it stays hidden (or is deleted).
-6.  **Notify User:** The user who uploaded the photo gets a notification about the decision.
+##### Logic Flow
+1. **User Uploads Photo:** A user submits a photo from the website.
+2. **Store & Tag:** The photo is saved, and its status is marked as `"pending review"` in the database.
+3. **Moderator Dashboard:** Moderators log into a special dashboard to see all `"pending review"` photos.
+4. **Review & Decide:** A moderator checks the photo and either `"approves"` it or `"rejects"` it.
+5. **Publish/Hide:** If approved, the photo becomes visible to everyone. If rejected, it stays hidden (or is deleted).
+6. **Notify User:** The user who uploaded the photo gets a notification about the decision.
 
-**Technologies I'd Use:**
-* **Frontend:** Vue.js (for the website users see and the moderator dashboard).
-* **Backend:** Golang (to handle the API for photo uploads, saving to the database, and changing status).
-* **Database:** PostgreSQL (to store photo details and their status).
-* **Storage:** AWS S3 / GCP Bucket(for securely storing the actual photo files).
-* **Queue (Optional, for big sites):** Google Pub/Sub / RabbitMQ (to handle background tasks like resizing photos or sending notifications without slowing down the main website).
+##### Technologies
+- **Frontend:** Vue.js (for the user website and moderator dashboard).
+- **Backend:** Golang (to handle the API for uploads, status updates, and business logic).
+- **Database:** PostgreSQL (to store photo metadata and review status).
+- **Storage:** AWS S3 or Google Cloud Storage (to store actual photo files securely).
+- **Queue:** Google Pub/Sub or RabbitMQ (to process background tasks like resizing photos and sending notifications).
+
+##### Data Structure
+
+###### SQL Table Example (PostgreSQL)
+```sql
+CREATE TYPE photo_status AS ENUM ('pending', 'approved', 'rejected');
+
+CREATE TABLE photos (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID REFERENCES users(id),
+    file_url TEXT NOT NULL,
+    status photo_status NOT NULL DEFAULT 'pending',
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    reviewed_at TIMESTAMPTZ,
+    reviewed_by UUID REFERENCES moderators(id),
+    review_description TEXT
+);
+```
 
 # Database Questions
 1. Level 1 : 
-```
+```sql
 SELECT 
     * 
 FROM 
@@ -27,7 +45,7 @@ WHERE
     Country = 'Germany';
 ```
 2. Level 2 : 
-```
+```sql
 SELECT 
     COUNT(customerID) AS customer_count, 
     Country
@@ -41,7 +59,7 @@ ORDER BY
     customer_count DESC;
 ```
 3. Level 3 : 
-```
+```sql
 SELECT
     Customers.CustomerName,
     COUNT(Orders.OrderID) AS OrderCount,
@@ -61,7 +79,7 @@ ORDER BY
 
 # JavaScript/TypeScript Questions
 1. Level 1:
-```
+```javascript
 function titleCase(str) {
     if (typeof str !== 'string' || str.length === 0) {
         return '';
@@ -85,7 +103,7 @@ console.log(`"sHoRt AnD sToUt" should return "Short And Stout": "${titleCase("sH
 console.log(`"SHORT AND STOUT" should return "Short And Stout": "${titleCase("SHORT AND STOUT")}"`);
 ```
 2. Level 2: 
-```
+```javascript
 function delay(ms) {
     return new Promise(resolve =>   setTimeout(resolve, ms));
 }
@@ -93,7 +111,7 @@ function delay(ms) {
 delay(3000).then(() => alert('runs after 3 seconds'));
 ```
 3. Level 2.5:
-```
+```javascript
 // Helper functions converted to return Promises
 function fetchDataPromise(url) {
     return new Promise((resolve, reject) => {
@@ -124,7 +142,6 @@ async function runProcessingFlow(url) {
     try {
         const data = await fetchDataPromise(url);
         console.log("Fetched Data (from async/await):", data);
-
         const processedData = await processDataPromise(data);
         console.log("Processed Data (from async/await):", processedData);
     } catch (error) {
@@ -141,37 +158,40 @@ runProcessingFlow("https://example.com");
 
 # Vue.js
 1. Explain Vue.js reactivity and common issues when tracking changes.
+* Vue has a reactivity system where the UI automatically updates when data changes. A common issue is that Vue doesn’t detect adding new properties to an object or directly replacing an array element by index.
 2. Describe data flow between components in a Vue.js app
+* Data flows from parent to child using props, and from child to parent using events. For unrelated components, state management or an event bus is used.
 3. List the most common cause of memory leaks in Vue.js apps and how they can be solved.
+* Not cleaning up event listeners, timers, or subscriptions when a component is destroyed. Use the component’s lifecycle hooks to remove them.
 4. What have you used for state management
-5. What’s the difference between pre-rendering and server side rendering?
-Answer : 
+* Never use vue before
+5. What’s the difference between pre-rendering and server side rendering? 
 * Pre-rendering : HTML is generated at build time
 * SSR : HTML is generated on each request.
+
 # Website Security Best Practises
-* Tell me all the security best practices you can think of - start with the most important ones first.
+#### Tell me all the security best practices you can think of - start with the most important ones first.
 Answer : 
 1. Always validate & sanitize user input.
 2. Don’t expose sensitive data to FE.
 3. Use proper authentication & authorization.
 4. Always use HTTPS.
 5. Rate limiting & CAPTCHA to prevent brute force.
-
-
+6. Use security headers.
+7. Keep dependencies updated.
 
 # Website Performance Best Practises
-* Tell me all the performance best practices you can think of - start with the most important ones first.
+#### Tell me all the performance best practices you can think of - start with the most important ones first.
 Answers : 
 1. Caching.
 2. Optimize image size.
 3. Lazy load.
 4. Use efficient queries & indexing on backend.
+5. Use of a CDN.
 
 # Golang (if interviewing for a Golang job) / .NET Candidate 
 Answer : 
-```
-// You can edit this code!
-// Click here and start typing.
+```golang
 package main
 
 import (
@@ -204,16 +224,15 @@ func main() {
 
 
 # Tools (Rate yourself 1 to 5)
-Git - 5
-Redis - 4
-VSCode / JetBrains? - 5
-Linux? - 4
-AWS - 4
-EC2 - 4
-Lambda - 3
-RDS - 3 
-Cloudwatch - 3
-S3 - 4
-Unit testing - 5 (Golang)
-Kanban boards - 4
-
+- Git - 5
+- Redis - 4
+- VSCode / JetBrains? - 5
+- Linux? - 4
+- AWS - 4
+- EC2 - 4
+- Lambda - 3
+- RDS - 3 
+- Cloudwatch - 3
+- S3 - 4
+- Unit testing - 5 (Golang)
+- Kanban boards - 4
